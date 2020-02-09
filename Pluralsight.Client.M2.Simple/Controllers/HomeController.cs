@@ -1,9 +1,8 @@
-﻿using System.Net;
-using System.Net.Http;
-using IdentityModel;
-using System.Threading.Tasks;
-using IdentityModel.Client;
+﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Pluralsight.Client.M2.Simple.Controllers
 {
@@ -35,8 +34,15 @@ namespace Pluralsight.Client.M2.Simple.Controllers
 
             Message += "\n\nCalling token endpoint...";
 
-            var tokenClient = new TokenClient("http://localhost:5000/connect/token", ClientId, ClientSecret);
-            var tokenResponse = await tokenClient.RequestAuthorizationCodeAsync(Code, RedirectUri);
+            var client = new HttpClient();
+            var tokenResponse = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
+            {
+                Address = "http://localhost:5000/connect/token",
+                ClientId = ClientId,
+                ClientSecret = ClientSecret,
+                Code = code,
+                RedirectUri = RedirectUri,
+            });
 
             if (tokenResponse.IsError)
             {

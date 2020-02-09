@@ -61,9 +61,17 @@ namespace Pluralsight.Client.M3.AuthorizationCode
             }
 
             Message += "\n\nCalling token endpoint...";
-            var tokenClient = new TokenClient("http://localhost:5000/connect/token", ClientId, ClientSecret);
-            var tokenResponse = await tokenClient.RequestAuthorizationCodeAsync(Code, RedirectUri);
-            
+
+            var client = new HttpClient();
+            var tokenResponse = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
+            {
+                Address = "http://localhost:5000/connect/token",
+                ClientId = ClientId,
+                ClientSecret = ClientSecret,
+                Code = Code,
+                RedirectUri = RedirectUri,
+            });
+
             if (tokenResponse.IsError)
             {
                 Message += "\n\nToken request failed";

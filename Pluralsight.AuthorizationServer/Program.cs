@@ -18,22 +18,22 @@ namespace Pluralsight.AuthorizationServer
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>()
-
-                    .UseSerilog((context, configuration) =>
-                    {
-                        configuration
-                            .MinimumLevel.Debug()
-                            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                            .MinimumLevel.Override("System", LogEventLevel.Warning)
-                            .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-                            .Enrich.FromLogContext()
-                            .WriteTo.Console(
-                                outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-                                theme: AnsiConsoleTheme.Literate);
-                    });
-                });
+            .UseSerilog((context, configuration) =>
+            {
+                configuration
+                    .MinimumLevel.Debug()
+                    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                    .MinimumLevel.Override("System", LogEventLevel.Warning)
+                    .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console(
+                        outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                        theme: AnsiConsoleTheme.Literate);
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }
+
