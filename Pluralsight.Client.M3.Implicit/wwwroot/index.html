@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Implicit OAuth Client</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+</head>
+<body>
+    <div class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="~/">
+                    <span class="navbar-brand">
+                        Unground - Social Coffee
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Integrate with Wired Brain Coffee</h1>
+                <p>Track your Wired Brain Coffee rewards account from within Unground!</p>
+                <button class="btn btn-primary" id="authorize">Authorize</button>
+                <button class="btn btn-primary" id="api">Call Rewards API</button>
+                <h3>Output</h3>
+                <pre id="results"></pre>
+            </div>
+        </div>
+
+        <hr />
+        <footer>
+            <p>&copy; 2018 - Unground</p>
+        </footer>
+    </div>
+
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/app.js"></script>
+</body>
+</html>

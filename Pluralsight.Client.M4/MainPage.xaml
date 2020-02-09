@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="Pluralsight.Client.M4.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pluralsight.Client.M4"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Margin="30,30,30,30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBox Grid.Row="0" x:Name="ResultFeed" Text="Ready to start..." HorizontalAlignment="Stretch" Margin="0,0,10,10" TextWrapping="Wrap" IsReadOnly="True" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Content="Authorize" HorizontalAlignment="Left" Margin="0,0,10,0" VerticalAlignment="Top" Click="Authorize_Click"/>
+            <Button Content="Get Token" HorizontalAlignment="Left" Margin="0,0,10,0" VerticalAlignment="Top" Click="Token_Click"/>
+            <Button Content="Call API" HorizontalAlignment="Left" Margin="0,0,10,0" VerticalAlignment="Top" Click="Api_Click"/>
+        </StackPanel>
+    </Grid>
+</Page>

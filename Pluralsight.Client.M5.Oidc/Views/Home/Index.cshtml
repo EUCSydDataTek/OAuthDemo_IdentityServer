@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Authentication
+<div class="row">
+    <div class="col-xs-12">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <h2>Authenticated</h2>
+            <p>
+                <ul>
+                    @foreach (var claim in User.Claims)
+                    {
+                        <li><strong> @claim.Type:</strong> @claim.Value</li>
+                    }
+                    <li><strong>Access Token: </strong>@await Context.GetTokenAsync("access_token")</li>
+                    <li><strong>Identity Token: </strong>@await Context.GetTokenAsync("id_token")</li>
+
+                </ul>
+            </p>
+        }
+        else
+        {
+            <h2>Unauthenticated</h2>
+        }
+    </div>
+</div>

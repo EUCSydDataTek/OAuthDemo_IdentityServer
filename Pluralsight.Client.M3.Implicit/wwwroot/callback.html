@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Please wait...</title>
+</head>
+<body>
+<script>
+    var hash = window.location.hash.substring(1);
+    var params = {};
+    hash.split('&').map(hk => {
+        const temp = hk.split('=');
+        params[temp[0]] = temp[1];
+    });
+
+    if (params.state !== localStorage.getItem("state")) {
+        window.location.replace("http://localhost:5004");
+    }
+
+    localStorage.setItem("token_type", params.token_type);
+    localStorage.setItem("access_token", params.access_token);
+    localStorage.setItem("expires_in", params.expires_in);
+    localStorage.setItem("state", params.state);
+
+    window.location.replace("http://localhost:5004");
+</script>
+</body>
+</html>

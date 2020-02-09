@@ -1,0 +1,37 @@
+@model LoginViewModel
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6">
+        <img src="~/logo.png" class="img-responsive center-block" alt="Wired Brain Coffee Logo" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6">
+        <h1 class="text-center">Login</h1>
+        <form asp-route="Login">
+            @Html.Partial("_ValidationSummary")
+            <input type="hidden" asp-for="ReturnUrl" />
+            <fieldset>
+                <div class="form-group">
+                    <label asp-for="Username"></label>
+                    <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" name="button" value="login">Login</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-sm-3">
+        <h3>Request Details</h3>
+        <ul>
+            @foreach (var key in Model.Parameters)
+            {
+                <li><strong>@key:</strong> @Model.Parameters[(string)key]</li>
+            }
+        </ul>
+    </div>
+</div>
