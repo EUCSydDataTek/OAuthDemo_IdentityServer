@@ -12,6 +12,8 @@ namespace Pluralsight.Client.M2.Simple.Controllers
         private static string Code { get; set; }
         private static string Token { get; set; }
 
+        HttpClient client = new HttpClient();
+
         public IActionResult Index()
         {
             return View("Index", Message);
@@ -34,7 +36,6 @@ namespace Pluralsight.Client.M2.Simple.Controllers
 
             Message += "\n\nCalling token endpoint...";
 
-            var client = new HttpClient();
             var tokenResponse = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
             {
                 Address = "http://localhost:5000/connect/token",
@@ -58,10 +59,9 @@ namespace Pluralsight.Client.M2.Simple.Controllers
 
         public async Task<IActionResult> CallApi()
         {
-            var httpClient = new HttpClient();
-            if (Token != null) httpClient.SetBearerToken(Token);
+            if (Token != null) client.SetBearerToken(Token);
 
-            var response = await httpClient.GetAsync("http://localhost:5002/api/rewards");
+            var response = await client.GetAsync("http://localhost:5002/api/rewards");
 
             if (response.IsSuccessStatusCode) Message += "\n\nAPI access authorized!";
             else if (response.StatusCode == HttpStatusCode.Unauthorized) Message += "\nUnable to contact API: Unauthorized!";
