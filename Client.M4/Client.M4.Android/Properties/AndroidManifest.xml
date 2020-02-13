@@ -1,6 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.client.m4">
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
-    <application android:label="Client.M4.Android"></application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.client.m4" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
+	<application android:label="Client.M4.Android">
+    
+		<activity android:label="Client.M4.Android" android:name=".MainActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="com.pluralsight.windows" android:host="easyauth.callback"/>
+			</intent-filter>
+		</activity>
+    
+	</application>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

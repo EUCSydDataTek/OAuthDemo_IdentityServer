@@ -1,10 +1,15 @@
 ﻿using IdentityModel;
+using IdentityModel.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Client.M4
@@ -22,10 +27,10 @@ namespace Client.M4
             InitializeComponent();
         }
 
-        private async void Authorize_Click(object sender, RoutedEventArgs e)
+        private async void Authorize_Click(object sender, EventArgs e )
         {
-            var state = CryptoRandom. .CreateRandomKeyString(25);
-            CodeVerifier = CryptoRandom.CreateRandomKeyString(50);
+            var state = Convert.ToBase64String(CryptoRandom.CreateRandomKey(25));
+            CodeVerifier = Convert.ToBase64String(CryptoRandom.CreateRandomKey(50));
 
             var codeVerifierBytes = Encoding.ASCII.GetBytes(CodeVerifier);
             var hashedBytes = SHA256.Create().ComputeHash(codeVerifierBytes);
@@ -33,7 +38,7 @@ namespace Client.M4
 
 
 
-            var url = "http://localhost:5000/connect/authorize" +
+            var url = "http://10.0.2.2:5000/connect/authorize" +
                       "?client_id=native_client" +
                       "&scope=wiredbrain_api.rewards" +
                       "&redirect_uri=com.pluralsight.windows:/callback" +
@@ -64,7 +69,7 @@ namespace Client.M4
             ResultFeed.Text += $"\nState: {result.State}";
         }
 
-        private async void Token_Click(object sender, RoutedEventArgs e)
+        private async void Token_Click(object sender, EventArgs e)
         {
             if (Code == null)
             {
@@ -73,8 +78,23 @@ namespace Client.M4
             }
 
             ResultFeed.Text += "\n\nCalling token endpoint...";
-            var tokenClient = new TokenClient("http://localhost:5000/connect/token", "native_client");
-            var tokenResponse = await tokenClient.RequestAuthorizationCodeAsync(Code, "com.pluralsight.windows:/callback", CodeVerifier);
+
+            //var tokenClient = new TokenClient("http://localhost:5000/connect/token", "native_client");
+            //var tokenResponse = await tokenClient.RequestAuthorizationCodeAsync(Code, "com.pluralsight.windows:/callback", CodeVerifier);
+
+
+            var client = new HttpClient();
+            var tokenResponse = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
+            {
+                Address = "http://10.0.2.2:5000/connect/token",
+                ClientId = "native_client",
+                ClientSecret = CodeVerifier,
+                Code = Code,
+                RedirectUri = "com.pluralsight.windows:/callback"
+            });
+
+
+
 
             if (tokenResponse.IsError)
             {
@@ -90,7 +110,7 @@ namespace Client.M4
             ResultFeed.Text += $"\ntoken_type: {tokenResponse.TokenType}";
         }
 
-        private async void Api_Click(object sender, RoutedEventArgs e)
+        private async void Api_Click(object sender, EventArgs e)
         {
             var httpClient = new HttpClient();
             if (Token != null)
@@ -99,12 +119,13 @@ namespace Client.M4
                 httpClient.SetBearerToken(Token);
             }
 
-            var response = await httpClient.GetAsync("http://localhost:5002/api/rewards");
+            var response = await httpClient.GetAsync("http://10.0.2.2:5002/api/rewards");
 
             if (response.IsSuccessStatusCode) ResultFeed.Text += "\n\nAPI access authorized!";
             else if (response.StatusCode == HttpStatusCode.Unauthorized) ResultFeed.Text += "\nUnable to contact API: Unauthorized!";
             else ResultFeed.Text += $"\nUnable to contact API. Status code {response.StatusCode}";
         }
+
     }
 
     public class SystemBrowser
@@ -115,7 +136,7 @@ namespace Client.M4
             inFlightRequest?.TrySetCanceled();
             inFlightRequest = new TaskCompletionSource<AuthorizeResponse>();
 
-            Launcher.LaunchUriAsync(new Uri(url));
+            Browser.OpenAsync(new Uri(url), BrowserLaunchMode.SystemPreferred);
 
             return inFlightRequest.Task;
         }
