@@ -16,6 +16,8 @@ namespace Pluralsight.Client.M3.AuthorizationCode
 
         private static readonly string State = CryptoRandom.CreateUniqueId();
 
+        HttpClient client = new HttpClient();
+
         public IActionResult Index()
         {
             return View("Index", Message);
@@ -62,7 +64,6 @@ namespace Pluralsight.Client.M3.AuthorizationCode
 
             Message += "\n\nCalling token endpoint...";
 
-            var client = new HttpClient();
             var tokenResponse = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
             {
                 Address = "http://localhost:5000/connect/token",
@@ -82,22 +83,21 @@ namespace Pluralsight.Client.M3.AuthorizationCode
             Token = tokenResponse.AccessToken;
             Message += "\n\nToken Received!";
             Message += $"\n<b>access_token:</b> {tokenResponse.AccessToken}";
-Message += $"\n<b>refresh_token:</b> {tokenResponse.RefreshToken}";
-                        Message += $"\n<b>expires_in:</b> {tokenResponse.ExpiresIn}";
+            Message += $"\n<b>refresh_token:</b> {tokenResponse.RefreshToken}";
+            Message += $"\n<b>expires_in:</b> {tokenResponse.ExpiresIn}";
             Message += $"\n<b>token_type:</b> {tokenResponse.TokenType}";
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> CallApi()
         {
-            var httpClient = new HttpClient();
             if (Token != null)
             {
                 Message += $"\n\nCalling API with Authorization header: {TokenType} {Token}";
-                httpClient.SetBearerToken(Token);
+                client.SetBearerToken(Token);
             }
 
-            var response = await httpClient.GetAsync("http://localhost:5002/api/rewards");
+            var response = await client.GetAsync("http://localhost:5002/api/rewards");
 
             if (response.IsSuccessStatusCode) Message += "\nAPI access authorized!";
             else if (response.StatusCode == HttpStatusCode.Unauthorized) Message += "\nUnable to contact API: Unauthorized!";
