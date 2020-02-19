@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Pluralsight.Client.M5.Oidc
 {
@@ -10,8 +9,6 @@ namespace Pluralsight.Client.M5.Oidc
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();;
-
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
