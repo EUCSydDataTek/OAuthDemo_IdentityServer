@@ -1,9 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Pluralsight.Client.M5.Oidc
 {
@@ -11,9 +10,7 @@ namespace Pluralsight.Client.M5.Oidc
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();;
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();;
 
             services.AddAuthentication(options =>
                 {
@@ -36,16 +33,24 @@ namespace Pluralsight.Client.M5.Oidc
 
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 });
+
+            services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
+            app.UseStaticFiles();
+            app.UseRouting();
 
             app.UseAuthentication();
-
-            app.UseStaticFiles();
-            app.UseMvc(builder => builder.MapRoute("default", "{action=Index}/{id?}", new { controller = "Home" }));
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
