@@ -10,6 +10,13 @@ Vælg Properties af Solution og vælg: Multiple Startup Projects.
 
 Start processen op ved at klikke på den grønne pil.
 
+Log på med følgende credentials:
+
+```<language>
+Username: scott
+Password: scott
+```
+
 #### UWP
 Her skal man start IdentityServer og Api først med Ctrl+F5.
 Derefter skal man sætte UWP projektet til Startup og starte det med Ctrl+F5.

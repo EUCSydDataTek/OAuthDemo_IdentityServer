@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.M4.Android", "Client
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.M4.iOS", "Client.M4\Client.M4.iOS\Client.M4.iOS.csproj", "{3AE6A687-B763-4FFE-BEB8-460ADA90AD1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.M4", "Client.M4\Client.M4\Client.M4.csproj", "{52D547C9-89DA-4823-97A7-47CC3E38BF0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.M4", "Client.M4\Client.M4\Client.M4.csproj", "{52D547C9-89DA-4823-97A7-47CC3E38BF0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
