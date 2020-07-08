@@ -12,10 +12,11 @@ Start processen op ved at klikke på den grønne pil.
 
 Log på med følgende credentials:
 
-```<language>
-Username: scott
-Password: scott
-```
+
+> Username: scott
+> 
+> Password: scott
+
 
 #### UWP
 Her skal man start IdentityServer og Api først med Ctrl+F5.
@@ -25,7 +26,16 @@ Derefter skal man sætte UWP projektet til Startup og starte det med Ctrl+F5.
 Filter sættes således op:
 - Filters | Use Filters checked
 - Show only the folloving Hosts: localhost:5000; localhost:5001; localhost:5002;
-- Hid if URL contains: lib logo css favicon
+- Hide if URL contains: lib logo css favicon
 
 Husk: Clear Cache.
 
+> Authentication Server: Port 5000
+> 
+> Client Application: Port 5001
+
+&nbsp;
+
+## Client.M2.Simple
+
+![Client.M2.Simple](images/Client.M2.Simple.png)
