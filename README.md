@@ -17,10 +17,7 @@ Log på med følgende credentials:
 > 
 > Password: scott
 
-
-#### UWP
-Her skal man start IdentityServer og Api først med Ctrl+F5.
-Derefter skal man sætte UWP projektet til Startup og starte det med Ctrl+F5.
+&nbsp;
 
 ### Fiddler
 Filter sættes således op:
@@ -32,10 +29,12 @@ Husk: Clear Cache.
 
 > Authentication Server: Port 5000
 > 
-> Client Application: Port 5001
+> Client.M?.Application: Port 5001
+> 
+> RewardsApi: Port 5002
 
 &nbsp;
 
-## Client.M2.Simple
+#### Client.M2.Simple
 
 ![Client.M2.Simple](images/Client.M2.Simple.png)
