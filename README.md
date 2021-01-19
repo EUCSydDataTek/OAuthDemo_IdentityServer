@@ -4,9 +4,10 @@
 Begynd med at vælge at køre koden som selfhosting (altså ikke IIS Express)
 Vælg Properties af Solution og vælg: Multiple Startup Projects.
  sæt rækkefølgen (Start) til:
-- AuthorizationServer
-- RewardsApi
+- AuthorizationServer (port 5000)
+- RewardsApi (port 5002)
 - Client.M?
+
 
 Start processen op ved at klikke på den grønne pil.
 

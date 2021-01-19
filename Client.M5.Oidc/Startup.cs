@@ -17,7 +17,7 @@ namespace Pluralsight.Client.M5.Oidc
                 .AddCookie()
                 .AddOpenIdConnect(options =>
                 {
-                    options.Authority = "http://localhost:5000";
+                    options.Authority = "https://localhost:5000";
                     options.RequireHttpsMetadata = false; // DEV only
 
                     options.ClientId = "oidc_client";

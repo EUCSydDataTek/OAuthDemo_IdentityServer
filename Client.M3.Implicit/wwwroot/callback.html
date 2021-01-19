@@ -14,7 +14,7 @@
     });
 
     if (params.state !== localStorage.getItem("state")) {
-        window.location.replace("http://localhost:5004");
+        window.location.replace("https://localhost:5004");
     }
 
     localStorage.setItem("token_type", params.token_type);
@@ -22,7 +22,7 @@
     localStorage.setItem("expires_in", params.expires_in);
     localStorage.setItem("state", params.state);
 
-    window.location.replace("http://localhost:5004");
+    window.location.replace("https://localhost:5004");
 </script>
 </body>
 </html>

@@ -15,12 +15,12 @@ function authorize() {
     let random = generateId();
     localStorage.setItem("state", random);
 
-    window.location.replace(`http://localhost:5000/connect/authorize?client_id=implicit_client&scope=wiredbrain_api.rewards&redirect_uri=http://localhost:5004/callback.html&response_type=token&response_mode=fragment&state=${random}`);
+    window.location.replace(`https://localhost:5000/connect/authorize?client_id=implicit_client&scope=wiredbrain_api.rewards&redirect_uri=https://localhost:5004/callback.html&response_type=token&response_mode=fragment&state=${random}`);
 }
 
 function api() {
     $.ajax({
-        url: "http://localhost:5002/api/rewards",
+        url: "https://localhost:5002/api/rewards",
         type: "GET",
         dataType: "json",
         beforeSend: function (xhr) {

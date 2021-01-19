@@ -48,7 +48,7 @@ namespace Pluralsight.AuthorizationServer
                     AllowedScopes = {"wiredbrain_api.rewards"},
                     AccessTokenType = AccessTokenType.Reference,
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = {"http://localhost:5001/home/callback"},
+                    RedirectUris = {"https://localhost:5001/home/callback"},
                     ClientSecrets = {new Secret("secret".Sha256())},
                     AllowOfflineAccess = true
                 },
@@ -59,8 +59,8 @@ namespace Pluralsight.AuthorizationServer
                     AllowedScopes = {"wiredbrain_api.rewards"},
                     AccessTokenType = AccessTokenType.Reference,
                     AllowedGrantTypes = GrantTypes.Implicit,
-                    RedirectUris = {"http://localhost:5004/callback.html"},
-                    AllowedCorsOrigins = {"http://localhost:5004"},
+                    RedirectUris = {"https://localhost:5004/callback.html"},
+                    AllowedCorsOrigins = {"https://localhost:5004"},
                     AllowAccessTokensViaBrowser = true
                 },
                 new Client
@@ -99,7 +99,7 @@ namespace Pluralsight.AuthorizationServer
                     AllowedScopes = {"openid", "profile","email", "wiredbrain_api.rewards"},
                     AccessTokenType = AccessTokenType.Reference,
                     AllowedGrantTypes = GrantTypes.Hybrid,
-                    RedirectUris = {"http://localhost:5005/signin-oidc"},
+                    RedirectUris = {"https://localhost:5005/signin-oidc"},
                     ClientSecrets = {new Secret("secret".Sha256())}
                 }
             };

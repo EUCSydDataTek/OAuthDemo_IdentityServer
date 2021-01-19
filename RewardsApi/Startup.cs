@@ -14,7 +14,7 @@ namespace Pluralsight.RewardsApi
             services.AddAuthentication("bearer")
                 .AddIdentityServerAuthentication("bearer", options =>
                 {
-                    options.Authority = "http://localhost:5000";
+                    options.Authority = "https://localhost:5000";
                     options.ApiName = "wiredbrain_api";
                     options.ApiSecret = "apisecret";
                     options.RequireHttpsMetadata = false; // DEV only!!

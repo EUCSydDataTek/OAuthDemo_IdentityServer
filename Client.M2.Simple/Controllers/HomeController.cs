@@ -21,12 +21,12 @@ namespace Pluralsight.Client.M2.Simple.Controllers
 
         private const string ClientId = "simple_client";
         private const string ClientSecret = "secret";
-        private const string RedirectUri = "http://localhost:5001/home/callback";
+        private const string RedirectUri = "https://localhost:5001/home/callback";
 
         public IActionResult Authorize()
         {
             Message += "\n\nRedirecting to authorization endpoint...";
-            return Redirect($"http://localhost:5000/connect/authorize?client_id={ClientId}&scope=wiredbrain_api.rewards&redirect_uri={RedirectUri}&response_type=code&response_mode=query");
+            return Redirect($"https://localhost:5000/connect/authorize?client_id={ClientId}&scope=wiredbrain_api.rewards&redirect_uri={RedirectUri}&response_type=code&response_mode=query");
         }
 
         public async Task<IActionResult> Callback([FromQuery] string code)
@@ -38,7 +38,7 @@ namespace Pluralsight.Client.M2.Simple.Controllers
 
             var tokenResponse = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
             {
-                Address = "http://localhost:5000/connect/token",
+                Address = "https://localhost:5000/connect/token",
                 ClientId = ClientId,
                 ClientSecret = ClientSecret,
                 Code = code,
@@ -61,7 +61,7 @@ namespace Pluralsight.Client.M2.Simple.Controllers
         {
             if (Token != null) client.SetBearerToken(Token);
 
-            var response = await client.GetAsync("http://localhost:5002/api/rewards");
+            var response = await client.GetAsync("https://localhost:5002/api/rewards");
 
             if (response.IsSuccessStatusCode) Message += "\n\nAPI access authorized!";
             else if (response.StatusCode == HttpStatusCode.Unauthorized) Message += "\nUnable to contact API: Unauthorized!";
