@@ -1,17 +1,28 @@
 
 
 ### Execute
-Begynd med at vælge at køre koden som selfhosting (altså ikke IIS Express)
-Vælg Properties af Solution og vælg: Multiple Startup Projects.
- sæt rækkefølgen (Start) til:
-- AuthorizationServer (port 5000)
-- RewardsApi (port 5002)
-- Client.M?
+Begynd med at konfigurere opstarten af de 3 projekter. Det er nemmerst at gøre ved at vælge Properties på hvert enkelt
+projekt og gå ind på fanen Debug.
+Der skal laves følgende:
+1. Vælg at køre koden som selfhosting (altså ikke IIS Express). Det sker ved under **Profile** vælge projektets navn og under **Launch** at vælge *Project*.
+2. Ændre App URL til følgende:
+   a. AuthorizationServer: https://localhost:5000
+   b. Client.M3.AuthorizationCode: https://localhost:5001
+   c. RewardsApi: https://localhost:5002
+3. Kun Clienten skal have et flueben ved Launch browser. Hverken Authorizationserver eller RewardsApi bruger en webside.
 
+![Project Config](images/ProjectConfig.jpg)
 
-Start processen op ved at klikke på den grønne pil.
+4. Til sidst vælges *Properties* af Solution og vælg: *Multiple Startup Projects*. Sæt rækkefølgen (Start) til:
+- AuthorizationServer
+- RewardsApi
+- Client.M3.AuthorizationCode
 
-Log på med følgende credentials:
+![Multiple Startup](images/MultipleStartup.jpg)
+
+5. Start processen op ved at klikke på den grønne pil (Debug).
+
+6. Log på med følgende credentials:
 
 
 > Username: scott
