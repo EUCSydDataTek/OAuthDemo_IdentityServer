@@ -9,7 +9,7 @@ Der skal laves følgende:
    a. AuthorizationServer: https://localhost:5000
    b. Client.M3.AuthorizationCode: https://localhost:5001
    c. RewardsApi: https://localhost:5002
-3. Kun Clienten skal have et flueben ved Launch browser. Hverken Authorizationserver eller RewardsApi bruger en webside.
+3. Kun Clienten skal have et flueben ved **Launch browser**. Hverken `Authorizationserver` eller `RewardsApi` bruger en webside.
 
 ![Project Config](images/ProjectConfig.jpg)
 
