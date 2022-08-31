@@ -47,7 +47,7 @@ namespace Pluralsight.Client.M3
             ResultFeed.Text += "\nStarting Authorization";
             ResultFeed.Text += $"\nState = {state}";
             ResultFeed.Text += $"\nCode Verifier = {CodeVerifier}";
-            ResultFeed.Text += $"\nCode Challange = {codeChallenge}";
+            ResultFeed.Text += $"\nCode Challenge = {codeChallenge}";
 
             var result = await new SystemBrowser().InvokeAsync(url);
 

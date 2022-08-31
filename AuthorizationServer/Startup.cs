@@ -27,6 +27,7 @@ namespace Pluralsight.AuthorizationServer
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
+            app.UseHsts();
 
             app.UseIdentityServer();
 

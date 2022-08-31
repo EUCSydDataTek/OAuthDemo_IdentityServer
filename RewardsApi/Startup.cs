@@ -28,6 +28,8 @@ namespace Pluralsight.RewardsApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHsts();
+
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseRouting();
