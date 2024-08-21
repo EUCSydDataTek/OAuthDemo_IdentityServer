@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using IdentityServer4.Stores;
+using Duende.IdentityServer.Stores;
 
 namespace Pluralsight.AuthorizationServer
 {

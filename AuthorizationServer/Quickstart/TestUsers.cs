@@ -1,4 +1,4 @@
-﻿using IdentityServer4.Test;
+﻿using Duende.IdentityServer.Test;
 using System.Collections.Generic;
 using System.Security.Claims;
 

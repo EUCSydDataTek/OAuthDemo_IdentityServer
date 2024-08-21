@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using Duende.IdentityServer.Models;
+using IdentityModel;
 using System.Collections.Generic;
 
 namespace Pluralsight.AuthorizationServer
@@ -14,18 +15,16 @@ namespace Pluralsight.AuthorizationServer
                     Name = "wiredbrain_api",
                     DisplayName = "Wired Brain Coffee API",
                     ApiSecrets = {new Secret("apisecret".Sha256())},
-                    Scopes =
-                    {
-                        new Scope
-                        {
-                            Name = "wiredbrain_api.rewards",
-                            DisplayName = "Wired Brain Coffee  API - Rewards",
-                            Description = "Read access to your Wired Brain Coffee rewards account."
-                        }
-                    }
-                }
+                    Scopes = { "wiredbrain_api.rewards" },
+                },
             };
         }
+
+        public static IEnumerable<ApiScope> ApiScopes =>
+            new ApiScope[]
+            {
+                 new ApiScope("wiredbrain_api.rewards")
+            };
 
         public static IEnumerable<IdentityResource> GetIdentityScopes()
         {
@@ -50,7 +49,8 @@ namespace Pluralsight.AuthorizationServer
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = {"https://localhost:5001/home/callback"},
                     ClientSecrets = {new Secret("secret".Sha256())},
-                    AllowOfflineAccess = true
+                    AllowOfflineAccess = true,
+                    RequirePkce = false
                 },
                 new Client
                 {
@@ -61,7 +61,8 @@ namespace Pluralsight.AuthorizationServer
                     AllowedGrantTypes = GrantTypes.Implicit,
                     RedirectUris = {"https://localhost:5004/callback.html"},
                     AllowedCorsOrigins = {"https://localhost:5004"},
-                    AllowAccessTokensViaBrowser = true
+                    AllowAccessTokensViaBrowser = true,
+                    RequirePkce = false
                 },
                 new Client
                 {
@@ -70,7 +71,8 @@ namespace Pluralsight.AuthorizationServer
                     AllowedScopes = {"wiredbrain_api.rewards"},
                     AccessTokenType = AccessTokenType.Reference,
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = {new Secret("secret".Sha256())}
+                    ClientSecrets = {new Secret("secret".Sha256())},
+                    RequirePkce = false
                 },
                 new Client
                 {
@@ -79,7 +81,8 @@ namespace Pluralsight.AuthorizationServer
                     AllowedScopes = {"wiredbrain_api.rewards"},
                     AccessTokenType = AccessTokenType.Reference,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    ClientSecrets = {new Secret("secret".Sha256())}
+                    ClientSecrets = {new Secret("secret".Sha256())},
+                    RequirePkce = false
                 },
                 new Client
                 {
@@ -97,10 +100,12 @@ namespace Pluralsight.AuthorizationServer
                     ClientId = "oidc_client",
                     ClientName = "OpenID Connect Client",
                     AllowedScopes = {"openid", "profile","email", "wiredbrain_api.rewards"},
+                    PostLogoutRedirectUris = {"https://localhost:5001/signin-oidc"},
                     AccessTokenType = AccessTokenType.Reference,
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     RedirectUris = {"https://localhost:5005/signin-oidc"},
-                    ClientSecrets = {new Secret("secret".Sha256())}
+                    ClientSecrets = {new Secret("secret".Sha256())},
+                    RequirePkce = false
                 }
             };
         }

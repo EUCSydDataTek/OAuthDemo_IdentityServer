@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using IdentityServer4.Models;
+using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,6 +20,7 @@ namespace Pluralsight.AuthorizationServer
                 .AddTestUsers(TestUsers.Users)
                 .AddInMemoryIdentityResources(Config.GetIdentityScopes())
                 .AddInMemoryApiResources(Config.GetApis())
+                .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryClients(Config.GetClients())
                 .AddDeveloperSigningCredential();
         }

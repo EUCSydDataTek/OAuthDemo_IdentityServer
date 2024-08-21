@@ -1,10 +1,12 @@
-using IdentityServer4.Events;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using IdentityServer4.Test;
+using Duende.IdentityServer;
+using Duende.IdentityServer.Events;
+using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Stores;
+using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -67,11 +69,11 @@ namespace Pluralsight.AuthorizationServer
                         };
                     }
 
-                    await HttpContext.SignInAsync(user.SubjectId, user.Username, props);
+                    await HttpContext.SignInAsync(new IdentityServerUser(user.SubjectId) { AdditionalClaims = user.Claims }, props);
 
                     if (context != null)
                     {
-                        if (await clientStore.IsPkceClientAsync(context.ClientId))
+                        if (await clientStore.IsPkceClientAsync(context.Client.ClientId))
                             return View("Redirect", new RedirectViewModel {RedirectUrl = model.ReturnUrl});
                         return Redirect(model.ReturnUrl);
                     }
@@ -124,9 +126,9 @@ namespace Pluralsight.AuthorizationServer
 
             providers.Add(new ExternalProvider{AuthenticationScheme = "test", DisplayName = "TEST"});
 
-            if (context?.ClientId != null)
+            if (context?.Client.ClientId != null)
             {
-                var client = await clientStore.FindEnabledClientByIdAsync(context.ClientId);
+                var client = await clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
                 if (client?.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
                 {
                     providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();

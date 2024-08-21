@@ -1,8 +1,8 @@
-using IdentityServer4.Events;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using IdentityServer4.Extensions;
+using Duende.IdentityServer.Events;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Stores;
+using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -88,8 +88,7 @@ namespace Pluralsight.AuthorizationServer
 
             if (model.Button == "no")
             {
-                grantedConsent = ConsentResponse.Denied;
-                await events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), result.ClientId, request.ScopesRequested));
+                await events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), result.ClientId, request.ValidatedResources.InvalidScopes));
             }
             else if (model.Button == "yes")
             {
@@ -100,10 +99,10 @@ namespace Pluralsight.AuthorizationServer
                     grantedConsent = new ConsentResponse
                     {
                         RememberConsent = model.RememberConsent,
-                        ScopesConsented = scopes.ToArray()
+                        ScopesValuesConsented = scopes.ToArray()
                     };
 
-                    await events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.ClientId, request.ScopesRequested, grantedConsent.ScopesConsented, grantedConsent.RememberConsent));
+                    await events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.Resources.ApiScopes.Select(s => s.Name), grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
                 }
                 else
                 {
@@ -120,7 +119,7 @@ namespace Pluralsight.AuthorizationServer
                 await interaction.GrantConsentAsync(request, grantedConsent);
 
                 result.RedirectUri = model.ReturnUrl;
-                result.ClientId = request.ClientId;
+                result.ClientId = request.Client.ClientId;
             }
             else
             {
@@ -135,20 +134,20 @@ namespace Pluralsight.AuthorizationServer
             var request = await interaction.GetAuthorizationContextAsync(returnUrl);
             if (request != null)
             {
-                var client = await clientStore.FindEnabledClientByIdAsync(request.ClientId);
+                var client = await clientStore.FindEnabledClientByIdAsync(request.Client.ClientId);
                 if (client != null)
                 {
-                    var resources = await resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
+                    var resources = await resourceStore.FindEnabledResourcesByScopeAsync(request.ValidatedResources.Resources.ApiScopes.Select(s => s.Name));
                     if (resources != null && (resources.IdentityResources.Any() || resources.ApiResources.Any()))
                     {
                         return CreateConsentViewModel(model, returnUrl, client, resources);
                     }
 
-                    logger.LogError("No scopes matching: {0}", request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
+                    logger.LogError("No scopes matching: {0}", request.ValidatedResources.Resources.ApiScopes.Select(s => s.Name).Aggregate((x, y) => x + ", " + y));
                 }
                 else
                 {
-                    logger.LogError("Invalid client id: {0}", request.ClientId);
+                    logger.LogError("Invalid client id: {0}", request.Client.ClientId);
                 }
             }
             else
@@ -175,11 +174,11 @@ namespace Pluralsight.AuthorizationServer
             };
 
             vm.IdentityScopes = resources.IdentityResources.Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) || model == null)).ToArray();
-            vm.ResourceScopes = resources.ApiResources.SelectMany(x => x.Scopes).Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) || model == null)).ToArray();
+            vm.ResourceScopes = resources.ApiResources.SelectMany(x => x.Scopes).Select(x => CreateScopeViewModel(resources.FindIdentityResourcesByScope(x), vm.ScopesConsented.Contains(x) || model == null)).ToArray();
             if (resources.OfflineAccess)
             {
                 vm.ResourceScopes = vm.ResourceScopes.Union(new[] {
-                    GetOfflineAccessScope(vm.ScopesConsented.Contains(IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess) || model == null)
+                    GetOfflineAccessScope(vm.ScopesConsented.Contains(Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess) || model == null)
                 });
             }
 
@@ -199,7 +198,7 @@ namespace Pluralsight.AuthorizationServer
             };
         }
 
-        private static ScopeViewModel CreateScopeViewModel(Scope scope, bool check)
+        private static ScopeViewModel CreateScopeViewModel(ApiScope scope, bool check)
         {
             return new ScopeViewModel
             {
@@ -216,7 +215,7 @@ namespace Pluralsight.AuthorizationServer
         {
             return new ScopeViewModel
             {
-                Name = IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess,
+                Name = Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess,
                 DisplayName = "Offline Access",
                 Description = "Access to your applications and resources, even when you are offline",
                 Emphasize = true,

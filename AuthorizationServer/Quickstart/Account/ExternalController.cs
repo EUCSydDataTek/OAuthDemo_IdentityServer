@@ -4,14 +4,15 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
-using IdentityServer4.Events;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using IdentityServer4.Test;
+using Duende.IdentityServer.Events;
+using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Stores;
+using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Duende.IdentityServer;
 
 namespace Pluralsight.AuthorizationServer
 {
@@ -58,7 +59,7 @@ namespace Pluralsight.AuthorizationServer
         [HttpGet]
         public async Task<IActionResult> Callback()
         {
-            var result = await HttpContext.AuthenticateAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme);
             if (result?.Succeeded != true) throw new Exception("External authentication error");
             
             var (user, provider, providerUserId, claims) = FindUserFromExternalProvider(result);
@@ -72,16 +73,18 @@ namespace Pluralsight.AuthorizationServer
             ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
 
             await events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.SubjectId, user.Username));
-            await HttpContext.SignInAsync(user.SubjectId, user.Username, provider, localSignInProps, additionalLocalClaims.ToArray());
+            //await HttpContext.SignInAsync(user.SubjectId, user.Username, provider, localSignInProps, additionalLocalClaims.ToArray());
 
-            await HttpContext.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            await HttpContext.SignInAsync(new IdentityServerUser(user.SubjectId) { AdditionalClaims = additionalLocalClaims.ToArray(), IdentityProvider = provider, DisplayName = user.Username }, localSignInProps);
+
+            await HttpContext.SignOutAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
             var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
             var context = await interaction.GetAuthorizationContextAsync(returnUrl);
             if (context != null)
             {
-                if (await clientStore.IsPkceClientAsync(context.ClientId))
+                if (await clientStore.IsPkceClientAsync(context.Client.ClientId))
                 {
                     return View("Redirect", new RedirectViewModel { RedirectUrl = returnUrl });
                 }
